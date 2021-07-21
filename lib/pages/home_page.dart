@@ -3,7 +3,7 @@
  * @Date: 2021-07-21 14:44:47
  * @Description: 
  * @LastEditors: Shaw
- * @LastEditTime: 2021-07-21 17:28:06
+ * @LastEditTime: 2021-07-21 17:30:13
  */
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -53,7 +53,6 @@ class _HomepageState extends State<HomePage> {
   }
 
   void _choiceAction() {
-    print('开始查询...');
     if (typeController.text.toString() == '') {
       showDialog(
           context: context,
@@ -69,14 +68,13 @@ class _HomepageState extends State<HomePage> {
 
   Future getHttp(String typeText) async {
     try {
-      print('参数:' + typeText);
       var data = {'name': typeText};
       Response response = await Dio().get(
           "http://192.168.0.11:3001/mock/37/getUsers",
           queryParameters: data);
       return response.data;
     } catch (e) {
-      return print(e);
+      return;
     }
   }
 }
