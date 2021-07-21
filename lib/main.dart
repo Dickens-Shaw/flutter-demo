@@ -1,21 +1,25 @@
+/*
+ * @Author: Shaw
+ * @Date: 2021-07-20 15:00:28
+ * @Description: 
+ * @LastEditors: Shaw
+ * @LastEditTime: 2021-07-20 18:18:07
+ */
+
 import 'package:flutter/material.dart';
+import './pages/index_page.dart';
 
 void main() => runApp(MyApp());
 
-// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Welcome to Flutter',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Welcome to Flutter'),
-        ),
-        body: const Center(
-          child: Text('Hello World2'),
-        ),
-      ),
+    return Container(
+      child: MaterialApp(
+          title: '我的商城',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(primaryColor: Colors.pink),
+          home: IndexPage()),
     );
   }
 }
