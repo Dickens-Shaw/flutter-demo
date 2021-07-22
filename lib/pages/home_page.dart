@@ -3,10 +3,11 @@
  * @Date: 2021-07-21 14:44:47
  * @Description: 
  * @LastEditors: Shaw
- * @LastEditTime: 2021-07-21 17:30:13
+ * @LastEditTime: 2021-07-22 11:01:06
  */
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import '../config/headers.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,65 +17,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomepageState extends State<HomePage> {
-  TextEditingController typeController = TextEditingController();
-  String showText = '这里展示搜索结果';
+  String showText = '还没有数据';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('商城首页'),
-      ),
+      appBar: AppBar(title: const Text('请求远程数据')),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            TextField(
-              controller: typeController,
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.all(10.0),
-                labelText: '物品类型',
-                helperText: '请输入你想查找的内容',
-              ),
-              autofocus: false,
-            ),
-            ElevatedButton(
-              onPressed: _choiceAction,
-              child: const Text('点击查找'),
-            ),
-            Text(
-              showText,
-              // overflow: TextOverflow.ellipsis,
-              // maxLines: 3,
-            )
+            ElevatedButton(onPressed: _jike, child: const Text('请求数据'))
           ],
-          // ignore: deprecated_member_use
         ),
       ),
     );
   }
 
-  void _choiceAction() {
-    if (typeController.text.toString() == '') {
-      showDialog(
-          context: context,
-          builder: (context) => const AlertDialog(title: Text('不能为空')));
-    } else {
-      getHttp(typeController.text.toString()).then((val) {
-        setState(() {
-          showText = val['data'].toString();
-        });
+  void _jike() {
+    print('极客');
+    getHttp().then((val) {
+      setState(() {
+        showText = val['data'].toString();
       });
-    }
+    });
   }
 
-  Future getHttp(String typeText) async {
+  Future getHttp() async {
     try {
-      var data = {'name': typeText};
-      Response response = await Dio().get(
-          "http://192.168.0.11:3001/mock/37/getUsers",
-          queryParameters: data);
+      Response response;
+      Dio dio = Dio();
+      print(httpHeaders);
+      dio.options.headers = httpHeaders;
+      response =
+          await dio.get("https://time.geekbang.org/serv/v1/column/newAll");
+      print(response);
       return response.data;
     } catch (e) {
-      return;
+      return print(e);
     }
   }
 }
