@@ -3,11 +3,10 @@
  * @Date: 2021-07-21 14:44:47
  * @Description: 
  * @LastEditors: Shaw
- * @LastEditTime: 2021-07-22 11:01:06
+ * @LastEditTime: 2021-07-22 14:00:48
  */
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import '../config/headers.dart';
+import '../service/service_method.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,42 +16,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomepageState extends State<HomePage> {
-  String showText = '还没有数据';
+  String homePageContent = '正在获取数据';
+  @override
+  void initState() {
+    getHomePageContent().then((val) {
+      print(val);
+      setState(() {
+        homePageContent = val.toString();
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('请求远程数据')),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ElevatedButton(onPressed: _jike, child: const Text('请求数据'))
-          ],
+        appBar: AppBar(
+          title: const Text('百姓生活+'),
         ),
-      ),
-    );
-  }
-
-  void _jike() {
-    print('极客');
-    getHttp().then((val) {
-      setState(() {
-        showText = val['data'].toString();
-      });
-    });
-  }
-
-  Future getHttp() async {
-    try {
-      Response response;
-      Dio dio = Dio();
-      print(httpHeaders);
-      dio.options.headers = httpHeaders;
-      response =
-          await dio.get("https://time.geekbang.org/serv/v1/column/newAll");
-      print(response);
-      return response.data;
-    } catch (e) {
-      return print(e);
-    }
+        body: SingleChildScrollView(
+          child: Text(homePageContent),
+        ));
   }
 }
